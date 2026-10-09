@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    <style>
+        :root {
+            --bg-color: #0b0f19;
+            --card-bg: #151c2c;
+            --accent-green: #10b981;
+            --accent-yellow: #f59e0b;
+            --accent-red: #ef4444;
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --border-color: rgba(255, 255, 255, 0.08);
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--bg-color); color: var(--text-main); padding: 20px 10px; display: flex; justify-content: center; }
+        .container { max-width: 800px; width: 100%; transition: max-width 0.3s ease; }
+        .card { background: var(--card-bg); border-radius: 20px; padding: 24px; margin-bottom: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5); border: 1px solid var(--border-color); }
+        .poster-wrapper { display: flex; flex-direction: column; gap: 15px; align-items: center; margin-bottom: 20px; }
+        .poster-wrapper img { width: 100%; max-width: 350px; border-radius: 14px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6); object-fit: cover; }
+        h1 { font-size: 1.35rem; color: #38bdf8; text-align: center; line-height: 1.4; }
+        h2 { font-size: 1.15rem; color: #ffffff; margin-bottom: 15px; border-bottom: 2px solid var(--border-color); padding-bottom: 8px; }
+        .player-wrapper { position: relative; background: #000; border-radius: 14px; overflow: hidden; aspect-ratio: 16/9; border: 1px solid var(--border-color); }
+        .player-wrapper video { width: 100%; height: 100%; outline: none; }
+        .download-title { text-align: center; margin-bottom: 18px; color: var(--accent-yellow); font-size: 1.1rem; letter-spacing: 0.5px; }
+        .btn-container { display: flex; flex-direction: column; gap: 14px; }
+        .btn-split { display: flex; align-items: center; justify-content: space-between; text-decoration: none; border-radius: 50px; overflow: hidden; font-weight: 1000; font-size: 0.95rem; transition: transform 0.2s ease, box-shadow 0.2s ease; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35); }
+        .btn-split:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0, 0, 0, 0.6); }
+        .btn-left { display: flex; align-items: center; gap: 10px; padding: 5px 20px; flex-grow: 1; color: #ffffff; }
+        .btn-right { padding: 15px 20px; background: rgba(0, 0, 0, 0.28); color: #ffffff; font-weight: 700; border-left: 1px solid rgba(255, 255, 255, 0.18); }
+        .btn-480p { background: linear-gradient(135deg, #10b981, #059669); }
+        .btn-720p { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .btn-1080p { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .screenshot-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        .screenshot-grid img { width: 100%; border-radius: 10px; object-fit: cover; border: 1px solid var(--border-color); }
+        .tags-container { display: flex; flex-wrap: wrap; gap: 8px; }
+        .tag-item { background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-color); color: var(--text-muted); padding: 6px 14px; border-radius: 20px; font-size: 0.78rem; text-decoration: none; transition: background 0.2s; }
+        .tag-item:hover { background: rgba(255, 255, 255, 0.12); color: #fff; }
+        .form-group-comm { margin-bottom: 12px; }
+        .form-control { width: 100%; padding: 12px 16px; background: rgba(0, 0, 0, 0.25); border: 1px solid var(--border-color); border-radius: 10px; color: #fff; font-family: inherit; }
+        .form-control:focus { outline: 1px solid #38bdf8; }
+        textarea.form-control { resize: vertical; min-height: 80px; }
+        .btn-submit { background: #2563eb; color: #fff; border: none; padding: 12px 24px; border-radius: 30px; font-weight: 600; cursor: pointer; transition: background 0.2s; }
+        .btn-submit:hover { background: #1d4ed8; }
+        footer { font-size: 0.8rem; color: var(--text-muted); text-align: center; line-height: 1.6; margin-top: 20px; }
+
+        @media (min-width: 768px) {
+            .container { max-width: 1000px; }
+            .poster-wrapper { flex-direction: row; justify-content: center; gap: 25px; }
+            .poster-wrapper img { max-width: 420px; }
+            .screenshot-grid { grid-template-columns: repeat(4, 1fr); }
+            h1 { font-size: 1.6rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+        <div class="poster-wrapper">
+            <img src="https://files.catbox.moe/0q5obz.jpg" alt="Poster 1">
+            <img src="https://files.catbox.moe/0q5obz.jpg" alt="Poster 2">
+        </div>
+        <h1>Div sirf tu kb tu</h1>
+    </div>
+
+    <div class="card">
+        <h2>Watch Online Preview</h2>
+        <div class="player-wrapper">
+            <video id="hls-video" controls poster="https://files.catbox.moe/0q5obz.jpg" crossorigin="anonymous" playsinline></video>
+        </div>
+    </div>
+
+    <div class="card">
+        <h3 class="download-title">:: DOWNLOAD LINKS ::</h3>
+        <div class="btn-container">
+            <a href="https://null-drop.onrender.com/api/public/file/268ab72ee459418b/stream.m3u8" class="btn-split btn-480p">
+                <span class="btn-left">📥 <span>Download 480p</span></span>
+                <span class="btn-right">500 mb</span>
+            </a>
+            <a href="https://null-drop.onrender.com/api/public/file/268ab72ee459418b/stream.m3u8" class="btn-split btn-720p">
+                <span class="btn-left">⚡ <span>Download 720p</span></span>
+                <span class="btn-right">1000mb</span>
+            </a>
+            <a href="https://null-drop.onrender.com/api/public/file/268ab72ee459418b/stream.m3u8" class="btn-split btn-1080p">
+                <span class="btn-left">🚀 <span>Download 1080p</span></span>
+                <span class="btn-right">2000mb</span>
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Screenshots</h2>
+        <div class="screenshot-grid">
+            <img src="https://files.catbox.moe/0q5obz.jpg" alt="Screenshot 1">
+            <img src="https://files.catbox.moe/0q5obz.jpg" alt="Screenshot 2">
+            <img src="https://files.catbox.moe/0q5obz.jpg" alt="Screenshot 3">
+            <img src="https://files.catbox.moe/0q5obz.jpg" alt="Screenshot 4">
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Tags</h2>
+        <div class="tags-container">
+            <a href="#" class="tag-item">Gold rate kya hai</a>
+            <a href="#" class="tag-item">hindi devnagari lipi me</a>
+            <a href="#" class="tag-item">padh sakate hain</a>
+            <a href="#" class="tag-item"></a>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Leave your comment</h2>
+        <form>
+            <div class="form-group-comm">
+                <textarea class="form-control" placeholder="Your comment *"></textarea>
+            </div>
+            <div class="form-group-comm">
+                <input type="text" class="form-control" placeholder="Your Name *">
+            </div>
+            <button type="submit" class="btn-submit">POST COMMENT</button>
+        </form>
+    </div>
+
+    <footer>
+        <p>AllMoviesHub Official Website – Download latest Bollywood, Hollywood Hindi Dubbed, South Indian Movies & Web Series in multiple formats.</p>
+    </footer>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        var video = document.getElementById('hls-video');
+        var videoSrc = 'https://null-drop.onrender.com/api/public/file/268ab72ee459418b/stream.m3u8';
+        
+        if (!videoSrc) return;
+
+        // Auto-Detect Stream Format
+        var isHls = videoSrc.includes('.m3u8');
+
+        if (isHls && Hls.isSupported()) {
+            var hls = new Hls();
+            hls.loadSource(videoSrc);
+            hls.attachMedia(video);
+        } else if (video.canPlayType('application/vnd.apple.mpegurl') && isHls) {
+            video.src = videoSrc;
+        } else {
+            // Native HTML5 Direct Play for MP4, WebM, MKV links
+            video.src = videoSrc;
+        }
+    });
+</script>
+
+</body>
+</html>
