@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>YouTube Guaranteed Movie Code Generator</title>
+    <title>Movie Webpage HTML Code Generator</title>
     <style>
         * { box-sizing: border-box; }
         body { font-family: Arial, sans-serif; background-color: #0b0f19; color: #fff; padding: 20px; display: flex; justify-content: center; }
@@ -26,7 +26,7 @@
 <body>
 
 <div class="container">
-    <h2>🎬 Guaranteed Working YouTube Movie Code Generator</h2>
+    <h2>🎬 Movie Webpage Code Generator</h2>
 
     <div class="form-group">
         <label>Page Title (Browser Tab Title)</label>
@@ -47,11 +47,6 @@
             <label>Poster / Image 2 URL (Optional)</label>
             <input type="text" id="posterUrl2" placeholder="https://...image2.jpg">
         </div>
-    </div>
-
-    <div class="form-group">
-        <label>YouTube Video / Shorts Link *</label>
-        <input type="text" id="ytUrl" placeholder="https://www.youtube.com/watch?v=... OR https://youtube.com/shorts/...">
     </div>
 
     <!-- Download Links -->
@@ -107,12 +102,6 @@
 </div>
 
 <script>
-function parseYouTubeId(url) {
-    if (!url) return null;
-    let match = url.match(/(?:shorts\/|v\/|embed\/|watch\?v=|&v=|\/)([^#&?]{11})/);
-    return match ? match[1] : null;
-}
-
 function generateFullHtml() {
     const pageTitle = document.getElementById('pageTitle').value.trim() || 'Movie Page';
     const mainTitle = document.getElementById('mainTitle').value.trim() || 'Movie Download Title';
@@ -122,14 +111,6 @@ function generateFullHtml() {
     let postersHtml = `<img src="${poster1}" alt="Poster 1">`;
     if (poster2) {
         postersHtml += `\n            <img src="${poster2}" alt="Poster 2">`;
-    }
-
-    const rawYtUrl = document.getElementById('ytUrl').value.trim();
-    const ytId = parseYouTubeId(rawYtUrl);
-
-    if (!ytId) {
-        alert("Kripya valid YouTube Video ya Shorts ka link daalein!");
-        return;
     }
 
     const link480 = document.getElementById('link480').value.trim() || '#';
@@ -173,63 +154,6 @@ function generateFullHtml() {
         .poster-wrapper img { width: 100%; max-width: 350px; border-radius: 14px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6); object-fit: cover; }
         h1 { font-size: 1.35rem; color: #38bdf8; text-align: center; line-height: 1.4; }
         h2 { font-size: 1.15rem; color: #ffffff; margin-bottom: 15px; border-bottom: 2px solid var(--border-color); padding-bottom: 8px; }
-        
-        /* Universal Player Container */
-        .player-wrapper { 
-            position: relative; 
-            background: #000; 
-            border-radius: 14px; 
-            overflow: hidden; 
-            aspect-ratio: 16/9; 
-            border: 1px solid var(--border-color); 
-        }
-
-        .yt-preview-box {
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(circle, #1a233a 0%, #000000 100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            text-decoration: none;
-            position: relative;
-        }
-
-        .play-btn {
-            width: 70px;
-            height: 50px;
-            background: #ff0000;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 4px 20px rgba(255, 0, 0, 0.6);
-            transition: transform 0.2s, background 0.2s;
-        }
-
-        .yt-preview-box:hover .play-btn {
-            transform: scale(1.1);
-            background: #cc0000;
-        }
-
-        .play-icon {
-            width: 0;
-            height: 0;
-            border-top: 10px solid transparent;
-            border-bottom: 10px solid transparent;
-            border-left: 18px solid #ffffff;
-            margin-left: 4px;
-        }
-
-        .play-text {
-            margin-top: 12px;
-            color: #ffffff;
-            font-size: 0.9rem;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
 
         .download-title { text-align: center; margin-bottom: 18px; color: var(--accent-yellow); font-size: 1.1rem; letter-spacing: 0.5px; }
         .btn-container { display: flex; flex-direction: column; gap: 14px; }
@@ -270,18 +194,6 @@ function generateFullHtml() {
             ${postersHtml}
         </div>
         <h1>${mainTitle}</h1>
-    </div>
-
-    <div class="card">
-        <h2>Watch Online Preview</h2>
-        <div class="player-wrapper">
-            <a href="https://www.youtube.com/watch?v=${ytId}" target="_blank" class="yt-preview-box">
-                <div class="play-btn">
-                    <div class="play-icon"></div>
-                </div>
-                <span class="play-text">Click To Watch Trailer / Preview</span>
-            </a>
-        </div>
     </div>
 
     <div class="card">
@@ -352,4 +264,5 @@ async function copyGeneratedCode() {
 </script>
 
 </body>
-</html>
+    </html>
+    
