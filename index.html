@@ -3,9 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>App</title>
+    <title>YouTube Guaranteed Movie Code Generator</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background-color: #0b0f19; color: #fff; padding: 20px; display: flex; justify-content: center; }
+        .container { width: 100%; max-width: 700px; background: #131b2e; padding: 20px; border-radius: 12px; border: 1px solid #1e293b; }
+        h2 { font-size: 18px; margin-bottom: 15px; color: #f59e0b; text-align: center; }
+        .form-group { margin-bottom: 12px; }
+        label { display: block; font-size: 12px; margin-bottom: 4px; color: #94a3b8; font-weight: bold; }
+        input, select, textarea { width: 100%; padding: 9px; background: #0b0f19; border: 1px solid #1e293b; color: #fff; border-radius: 6px; font-size: 13px; font-family: inherit; }
+        textarea { height: 70px; resize: vertical; }
+        button { width: 100%; background: #f59e0b; color: #000; border: none; padding: 12px; font-weight: bold; border-radius: 6px; cursor: pointer; margin-top: 10px; font-size: 14px; }
+        button:hover { background: #d97706; }
+        .btn-copy { background: #10b981; color: #fff; margin-top: 10px; }
+        .btn-copy:hover { background: #059669; }
+        .output-box { margin-top: 15px; display: none; }
+        .output-box textarea { height: 220px; color: #38bdf8; font-family: monospace; font-size: 11px; }
+        .row { display: flex; gap: 10px; }
+        .row .form-group { flex: 1; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>🎬 Guaranteed Working YouTube Movie Code Generator</h2>
+
+    <div class="form-group">
+        <label>Page Title (Browser Tab Title)</label>
+        <input type="text" id="pageTitle" placeholder="Ex: Download Movie Title | AllMoviesHub">
+    </div>
+
+    <div class="form-group">
+        <label>Main Title (Heading Text)</label>
+        <input type="text" id="mainTitle" placeholder="Ex: Download Movie Title | 2026 | Pre-DVDRip">
+    </div>
+
+    <div class="row">
+        <div class="form-group">
+            <label>Poster / Image 1 URL</label>
+            <input type="text" id="posterUrl1" placeholder="https://...image1.jpg">
+        </div>
+        <div class="form-group">
+            <label>Poster / Image 2 URL (Optional)</label>
+            <input type="text" id="posterUrl2" placeholder="https://...image2.jpg">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>YouTube Video / Shorts Link *</label>
+        <input type="text" id="ytUrl" placeholder="https://www.youtube.com/watch?v=... OR https://youtube.com/shorts/...">
+    </div>
+
+    <!-- Download Links -->
+    <div class="row">
+        <div class="form-group">
+            <label>480p Link</label>
+            <input type="text" id="link480" placeholder="https://...">
+        </div>
+        <div class="form-group">
+            <label>480p Size</label>
+            <input type="text" id="size480" placeholder="500MB">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group">
+            <label>720p Link</label>
+            <input type="text" id="link720" placeholder="https://...">
+        </div>
+        <div class="form-group">
+            <label>720p Size</label>
+            <input type="text" id="size720" placeholder="1000MB">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="form-group">
+            <label>1080p Link</label>
+            <input type="text" id="link1080" placeholder="https://...">
+        </div>
+        <div class="form-group">
+            <label>1080p Size</label>
+            <input type="text" id="size1080" placeholder="2000MB">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label>Screenshots URLs (Comma separated)</label>
+        <textarea id="screenshots" placeholder="https://...ss1.jpg, https://...ss2.jpg, https://...ss3.jpg, https://...ss4.jpg"></textarea>
+    </div>
+
+    <div class="form-group">
+        <label>Tags (Comma separated)</label>
+        <input type="text" id="tags" placeholder="Gold, silver, methi">
+    </div>
+
+    <button onclick="generateFullHtml()">Generate HTML Code</button>
+
+    <div class="output-box" id="outputSection">
+        <textarea id="finalHtmlCode" readonly></textarea>
+        <button class="btn-copy" id="copyBtn" onclick="copyGeneratedCode()">Copy HTML Code</button>
+    </div>
+</div>
+
+<script>
+function parseYouTubeId(url) {
+    if (!url) return null;
+    let match = url.match(/(?:shorts\/|v\/|embed\/|watch\?v=|&v=|\/)([^#&?]{11})/);
+    return match ? match[1] : null;
+}
+
+function generateFullHtml() {
+    const pageTitle = document.getElementById('pageTitle').value.trim() || 'Movie Page';
+    const mainTitle = document.getElementById('mainTitle').value.trim() || 'Movie Download Title';
+    const poster1 = document.getElementById('posterUrl1').value.trim() || 'https://files.catbox.moe/zs8vht.jpg';
+    const poster2 = document.getElementById('posterUrl2').value.trim();
+
+    let postersHtml = `<img src="${poster1}" alt="Poster 1">`;
+    if (poster2) {
+        postersHtml += `\n            <img src="${poster2}" alt="Poster 2">`;
+    }
+
+    const rawYtUrl = document.getElementById('ytUrl').value.trim();
+    const ytId = parseYouTubeId(rawYtUrl);
+
+    if (!ytId) {
+        alert("Kripya valid YouTube Video ya Shorts ka link daalein!");
+        return;
+    }
+
+    const link480 = document.getElementById('link480').value.trim() || '#';
+    const size480 = document.getElementById('size480').value.trim() || '500';
+    const link720 = document.getElementById('link720').value.trim() || '#';
+    const size720 = document.getElementById('size720').value.trim() || '1000';
+    const link1080 = document.getElementById('link1080').value.trim() || '#';
+    const size1080 = document.getElementById('size1080').value.trim() || '2000';
+
+    const ssInput = document.getElementById('screenshots').value.trim();
+    let ssArray = ssInput ? ssInput.split(',').map(s => s.trim()) : [poster1, poster1, poster1, poster1];
+    let ssHtml = ssArray.map((url, i) => `<img src="${url}" alt="Screenshot ${i + 1}">`).join('\n            ');
+
+    const tagsInput = document.getElementById('tags').value.trim();
+    let tagsArray = tagsInput ? tagsInput.split(',').map(t => t.trim()) : ['Gold', 'silver', 'methi'];
+    let tagsHtml = tagsArray.map(tag => `<a href="#" class="tag-item">${tag}</a>`).join('\n            ');
+
+    const fullCode = `<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>${pageTitle}</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <style>
         :root {
             --bg-color: #0b0f19;
@@ -25,8 +173,64 @@
         .poster-wrapper img { width: 100%; max-width: 350px; border-radius: 14px; box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6); object-fit: cover; }
         h1 { font-size: 1.35rem; color: #38bdf8; text-align: center; line-height: 1.4; }
         h2 { font-size: 1.15rem; color: #ffffff; margin-bottom: 15px; border-bottom: 2px solid var(--border-color); padding-bottom: 8px; }
-        .player-wrapper { position: relative; background: #000; border-radius: 14px; overflow: hidden; aspect-ratio: 16/9; border: 1px solid var(--border-color); }
-        .player-wrapper video { width: 100%; height: 100%; outline: none; }
+        
+        /* Universal Player Container */
+        .player-wrapper { 
+            position: relative; 
+            background: #000; 
+            border-radius: 14px; 
+            overflow: hidden; 
+            aspect-ratio: 16/9; 
+            border: 1px solid var(--border-color); 
+        }
+
+        .yt-preview-box {
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, #1a233a 0%, #000000 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            text-decoration: none;
+            position: relative;
+        }
+
+        .play-btn {
+            width: 70px;
+            height: 50px;
+            background: #ff0000;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 20px rgba(255, 0, 0, 0.6);
+            transition: transform 0.2s, background 0.2s;
+        }
+
+        .yt-preview-box:hover .play-btn {
+            transform: scale(1.1);
+            background: #cc0000;
+        }
+
+        .play-icon {
+            width: 0;
+            height: 0;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-left: 18px solid #ffffff;
+            margin-left: 4px;
+        }
+
+        .play-text {
+            margin-top: 12px;
+            color: #ffffff;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
         .download-title { text-align: center; margin-bottom: 18px; color: var(--accent-yellow); font-size: 1.1rem; letter-spacing: 0.5px; }
         .btn-container { display: flex; flex-direction: column; gap: 14px; }
         .btn-split { display: flex; align-items: center; justify-content: space-between; text-decoration: none; border-radius: 50px; overflow: hidden; font-weight: 1000; font-size: 0.95rem; transition: transform 0.2s ease, box-shadow 0.2s ease; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.35); }
@@ -63,33 +267,37 @@
 <div class="container">
     <div class="card">
         <div class="poster-wrapper">
-            <img src="https://files.catbox.moe/0q5obz.jpg" alt="Poster 1">
-            <img src="https://files.catbox.moe/0q5obz.jpg" alt="Poster 2">
+            ${postersHtml}
         </div>
-        <h1>Div sirf tu kb tu</h1>
+        <h1>${mainTitle}</h1>
     </div>
 
     <div class="card">
         <h2>Watch Online Preview</h2>
         <div class="player-wrapper">
-            <video id="hls-video" controls poster="https://files.catbox.moe/0q5obz.jpg" crossorigin="anonymous" playsinline></video>
+            <a href="https://www.youtube.com/watch?v=${ytId}" target="_blank" class="yt-preview-box">
+                <div class="play-btn">
+                    <div class="play-icon"></div>
+                </div>
+                <span class="play-text">Click To Watch Trailer / Preview</span>
+            </a>
         </div>
     </div>
 
     <div class="card">
         <h3 class="download-title">:: DOWNLOAD LINKS ::</h3>
         <div class="btn-container">
-            <a href="https://null-drop.onrender.com/api/public/file/268ab72ee459418b/stream.m3u8" class="btn-split btn-480p">
+            <a href="${link480}" class="btn-split btn-480p">
                 <span class="btn-left">📥 <span>Download 480p</span></span>
-                <span class="btn-right">500 mb</span>
+                <span class="btn-right">${size480}</span>
             </a>
-            <a href="https://null-drop.onrender.com/api/public/file/268ab72ee459418b/stream.m3u8" class="btn-split btn-720p">
+            <a href="${link720}" class="btn-split btn-720p">
                 <span class="btn-left">⚡ <span>Download 720p</span></span>
-                <span class="btn-right">1000mb</span>
+                <span class="btn-right">${size720}</span>
             </a>
-            <a href="https://null-drop.onrender.com/api/public/file/268ab72ee459418b/stream.m3u8" class="btn-split btn-1080p">
+            <a href="${link1080}" class="btn-split btn-1080p">
                 <span class="btn-left">🚀 <span>Download 1080p</span></span>
-                <span class="btn-right">2000mb</span>
+                <span class="btn-right">${size1080}</span>
             </a>
         </div>
     </div>
@@ -97,20 +305,14 @@
     <div class="card">
         <h2>Screenshots</h2>
         <div class="screenshot-grid">
-            <img src="https://files.catbox.moe/0q5obz.jpg" alt="Screenshot 1">
-            <img src="https://files.catbox.moe/0q5obz.jpg" alt="Screenshot 2">
-            <img src="https://files.catbox.moe/0q5obz.jpg" alt="Screenshot 3">
-            <img src="https://files.catbox.moe/0q5obz.jpg" alt="Screenshot 4">
+            ${ssHtml}
         </div>
     </div>
 
     <div class="card">
         <h2>Tags</h2>
         <div class="tags-container">
-            <a href="#" class="tag-item">Gold rate kya hai</a>
-            <a href="#" class="tag-item">hindi devnagari lipi me</a>
-            <a href="#" class="tag-item">padh sakate hain</a>
-            <a href="#" class="tag-item"></a>
+            ${tagsHtml}
         </div>
     </div>
 
@@ -132,27 +334,21 @@
     </footer>
 </div>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-        var video = document.getElementById('hls-video');
-        var videoSrc = 'https://null-drop.onrender.com/api/public/file/268ab72ee459418b/stream.m3u8';
-        
-        if (!videoSrc) return;
+</body>
+</html>`;
 
-        // Auto-Detect Stream Format
-        var isHls = videoSrc.includes('.m3u8');
+    document.getElementById('finalHtmlCode').value = fullCode;
+    document.getElementById('outputSection').style.display = 'block';
+}
 
-        if (isHls && Hls.isSupported()) {
-            var hls = new Hls();
-            hls.loadSource(videoSrc);
-            hls.attachMedia(video);
-        } else if (video.canPlayType('application/vnd.apple.mpegurl') && isHls) {
-            video.src = videoSrc;
-        } else {
-            // Native HTML5 Direct Play for MP4, WebM, MKV links
-            video.src = videoSrc;
-        }
-    });
+async function copyGeneratedCode() {
+    const textCode = document.getElementById('finalHtmlCode');
+    textCode.select();
+    document.execCommand('copy');
+    const btn = document.getElementById('copyBtn');
+    btn.innerHTML = "✔️ Copied to Clipboard";
+    setTimeout(() => { btn.innerHTML = "Copy HTML Code"; }, 2000);
+}
 </script>
 
 </body>
